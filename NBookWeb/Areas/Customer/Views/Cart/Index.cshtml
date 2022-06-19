@@ -1,0 +1,78 @@
+﻿@model NBook.Models.ViewModels.ShoppingCartVM
+@using Microsoft.Extensions.Options
+@inject IOptions<NBook.Utility.StripeSettings> Stripe
+
+<section class="h-100 h-custom">
+    <div class="card-header bg-dark text-light mx-2 align-items-center" style="border-radius:15px;">
+				<div class="row">
+					<div class="col-6  pt-2">
+						<i class="fa fa-shopping-cart"></i> &nbsp;
+						Shopping Cart
+					</div>
+					<div class="col-6 text-end">
+						<a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-info btn-sm">Continue Shopping</a>
+					</div>
+				</div></div>
+    <form method="post">
+  <div class="container h-100 py-2">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col">
+        <div class="card shopping-cart" style="border-radius: 15px;">
+          <div class="card-body text-black">
+
+            <div class="row">
+              <div class=" px-5 py-4">
+
+                <h3 class="mb-5 pt-2 text-center fw-bold text-uppercase">Your products</h3>
+
+                @foreach(var item in Model.ListCart){
+                <div class="d-flex align-items-center mb-5" id="shopping-cart-product">
+                  <div class="flex-shrink-0">
+                    <img src="@item.Product.ImageUrl"
+                      class="img-fluid" style="width: 150px;" alt="Generic placeholder image">
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <a asp-action="remove" asp-route-cartId="@item.Id" class="float-end"><i class="bi bi-x-square"></i></a>
+                    <h5 class="text-primary">"@item.Product.Title</h5>
+                    <h6 style="color: #9e9e9e;">@item.Product.Author</h6>
+                    <div class="d-flex align-items-center justify-content-between" id="price-count-shopping-cart-info">
+                      <p class="fw-bold mb-0 me-5 pe-3">@item.Price.ToString("c") <span class="text-muted">&nbsp;x&nbsp;</span>@item.Count</p>
+                      <div >
+							<div class="w-100 btn-group linear-bg " role="group">
+								<a asp-action="plus" asp-route-cartId="@item.Id" class="btn btn-primary " >
+									<i class="bi bi-plus-lg"></i>
+								</a> &nbsp;
+								<a asp-action="minus" asp-route-cartId="@item.Id" class="btn btn-primary " >
+									<i class="bi bi-dash-lg"></i>
+								</a>
+							</div>
+
+						</div>
+                    </div>
+                  </div>
+                </div>
+                }
+                
+
+                <hr class="mb-4" style="height: 2px; background-color: #1266f1; opacity: 1;">
+
+               
+                <div class="d-flex justify-content-between p-2 mb-2" >
+                  <h5 class="fw-bold mb-0">Total:</h5>
+                  <h5 class="fw-bold mb-0">@Model.OrderHeader.OrderTotal.ToString("c")</h5>
+                </div>
+
+              </div>
+              <div class="d-flex justify-content-center w-100">
+                  <a asp-action="Summary" class="btn btn-success form-control linear-bg" style="width:200px">Summary</a>
+</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </form>
+</section>
